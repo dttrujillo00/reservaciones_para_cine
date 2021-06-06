@@ -4,11 +4,15 @@ const count = document.getElementById('count');
 const total = document.getElementById('total');
 const movieSelect = document.getElementById('movie');
 const screen = document.querySelector('.screen');
+const audio = document.getElementById('audio');
+const silenciar = document.querySelector('.silenciar');
+var songPlay = true;
 
 let ticketPrice = +movieSelect.value;//El simbolo de + lo pasa como un numero entero
 
 populateUI();
 updateScreen(movieSelect.selectedIndex);
+updateSong(movieSelect.selectedIndex);
 //Update screen
 function updateScreen(index) {
 
@@ -17,7 +21,7 @@ function updateScreen(index) {
 			screen.style.backgroundImage = 'url(img/Img_EndGame.jpg)';
 			break;
 		case 1:
-			screen.style.backgroundImage = 'url(img/Img_Joker.jpg)';
+			screen.style.backgroundImage = 'url(img/Img_ElPadrino.jpeg)';
 			break;
 		case 2:
 			screen.style.backgroundImage = 'url(img/Img_ToyStory4.jpeg)';
@@ -28,6 +32,32 @@ function updateScreen(index) {
 		default:
 			break;
 	}
+}
+
+function updateSong(index){
+	switch(index){
+		case 0:
+			audio.src = 'songs/EndGame.mp3';
+			break;
+		case 1:
+			audio.src = 'songs/Godfather.mp3';
+			break;
+		case 2:
+			audio.src = 'songs/ToyStory.mp3';
+			break;
+		case 3:
+			audio.src = 'songs/ReyLeon.mp3';
+			break;
+		default:
+			break;
+	}
+
+	if(songPlay){
+		audio.play();
+	} else {
+		audio.pause();
+	}
+	
 }
 
 //Save selected movie index and price
@@ -75,6 +105,7 @@ movieSelect.addEventListener('change', e => {
 	setMovieData(e.target.selectedIndex, e.target.value);
 	updateSelectedCount();
 	updateScreen(e.target.selectedIndex);
+	updateSong(e.target.selectedIndex);
 });
 
 container.addEventListener('click', e => {
@@ -84,6 +115,22 @@ container.addEventListener('click', e => {
 		updateSelectedCount();
 	}
 });
+
+silenciar.addEventListener('click', e => {
+	// console.log(e.target);
+	if(songPlay){
+		e.target.classList.remove('fa-volume-up');
+		e.target.classList.add('fa-volume-off');
+		songPlay = false;
+		audio.pause();
+	} else {
+		e.target.classList.remove('fa-volume-off');
+		e.target.classList.add('fa-volume-up');
+		songPlay = true;
+		audio.play();
+	}
+	
+} );
 
 //Initial count and total
 updateSelectedCount();
